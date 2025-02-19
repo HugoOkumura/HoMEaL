@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./HoMEaL_backend
+    container_name: homeal_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./HoMEaL_backend:/app
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=sqlite:///db.sqlite3
+    command: python3 manage.py runserver 0.0.0.0:8000
+
+    
+  frontend:
+    build: ./homeal_frontend
+    container_name: homeal_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./homeal_frontend:/app
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    command: pnpm dev
+    depends_on:
+      - backend
+      

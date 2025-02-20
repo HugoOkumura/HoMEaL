@@ -1,4 +1,9 @@
 venv/
+HoMEaL_backend/pyvenv.cfg
+HoMEaL_backend/bin/
+HoMEaL_backend/lib/
+HoMEaL_backend/lib64/
+HoMEaL_backend/include/
 .env/
 .env.local
 .env.development

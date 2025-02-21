@@ -11,22 +11,39 @@ from .serializer import ClienteSerializer, GerenteSerializer, UsuarioSerializer
 from .permissions import GerentePermissao
 
 # Create your views here.
-class CriarConta(APIView):
 
+'''
+
+    APAGAR TODOS OS COMENTÁRIOS ANTES DO PULL REQUEST
+
+'''
+
+class CriarConta(APIView):
+    '''
+    Pega os tipos de permissões que um tipo de usuario pode ter
+    '''
     def get_permissions(self):
         if self.kwargs.get('tipo_usuario') == 'gerente':
             return [GerentePermissao(), IsAuthenticated()]
         return [AllowAny()]
 
-
+    '''
+    Método de teste para ver se a view estava funcionando corretamente.
+    '''
     def get(self, request, tipo_usuario):
         data = Usuario.objects.all()
         serializer = UsuarioSerializer(data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
     def post(self, request, tipo_usuario):
-        if tipo_usuario == 'gerente':
 
+        '''
+        Trata a criação de conta de usuários.
+        Existe 2 tipos de usuários, Cliente e Gerente. Onde apenas Gerentes podem criar Gerentes.
+        Ou seja, para poder criar mais gerentes deve ter um Gerente já autenticado. 
+        Enquanto qualquer pessoa pode criar um Cliente, sem necessidade de autenticação.
+        '''
+        if tipo_usuario == 'gerente':
             if not request.user.is_authenticated:
                 return Response(
                     {
@@ -43,6 +60,7 @@ class CriarConta(APIView):
         self.check_permissions(request)
         
         serializer = serializer_class(data=request.data)
+
 
         if serializer.is_valid():
             usuario_data = serializer.validated_data.pop('usuario')

@@ -5,6 +5,12 @@ from django.utils import timezone
 # Create your models here.
 
 class UsuarioManager(BaseUserManager):
+
+
+    '''
+    Como esta usando uma classe customizada pra User é necessário a criação de um Manager para permitir autenticação e o 
+    utilizo dos campos username e password do User.
+    '''
     def create_user(self, email, password=None, tipo_usuario='cliente'):
         if not email:
             raise ValueError('O usuário deve ter um email')
@@ -22,6 +28,10 @@ class UsuarioManager(BaseUserManager):
 
 
 class CamposComuns(models.Model):
+
+    '''
+    Classe puramente para evitar repetição dos campos dos usuários
+    '''
     nome = models.CharField(max_length=30, unique=True)
     endereco = models.CharField(max_length=70, blank=True)
     cpf = models.CharField(max_length=11, unique=True)
@@ -30,6 +40,11 @@ class CamposComuns(models.Model):
         abstract = True
 
 class Usuario(AbstractBaseUser):
+
+    '''
+    Classe abstrata de Usuario a partir desta classe que poderá ser feita a autenticação e ver o tipo de usuário (Cliente/Gerente)
+    '''
+
     TIPO_USUARIO_CHOICES = [
         ("gerente","Gerente"),
         ("cliente","Cliente")

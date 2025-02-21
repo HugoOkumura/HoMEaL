@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -60,6 +61,43 @@ class CriarConta(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+class Login(APIView):
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        senha = request.data.get('password')
+
+        usuario = authenticate(request, email=email, password=senha)
+        if usuario is not None:
+            
+            login(request, usuario)
+
+
+            '''
+            Redirecionamento: Após o login, a view verifica o tipo de usuário (tipo_usuario) e define a URL
+            de redirecionamento. Se o parâmetro next estiver presente na requisição (por exemplo, se o usuário 
+            foi redirecionado para o login a partir de outra página), ele será usado. Caso contrário, uma página 
+            padrão será definida.
+            '''
+            if usuario.tipo_usuario == 'gerente':
+                redirect_url = request.data.get('next','url/para/uma/página/padrao/gerente') #ALTERAR QUANDO O FRONT ESTIVER FEITO
+            
+            else:
+                redirect_url = request.data.get('next','url/para/uma/página/padrao/cliente') #ALTERAR QUANDO O FRONT ESTIVER FEITO
+
+            return Response({
+                "message":"Login realizado com sucesso",
+                "tipo_usuario":usuario.tipo_usuario,
+                "redirect_url": redirect_url
+            }, status=status.HTTP_200_OK)
+        
+        else: 
+            return Response({
+                "message":"email ou senha incorretos"
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
 '''
 {
     "usuario": {
@@ -69,6 +107,11 @@ class CriarConta(APIView):
     "nome":"teste",
     "endereco":"rua testando",
     "cpf":"12345678901"
+}
+
+{
+    "email":"Pedro@gmail.com,
+    "password":"123mudar"
 }
 
 '''

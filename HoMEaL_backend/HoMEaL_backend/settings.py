@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework', # Django REST framework
     'rest_framework.authtoken',
     'usuarios',
+    'lanches',
 ]
 
 MIDDLEWARE = [

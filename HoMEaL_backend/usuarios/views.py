@@ -98,6 +98,8 @@ class Login(APIView):
             de redirecionamento. Se o parâmetro next estiver presente na requisição (por exemplo, se o usuário 
             foi redirecionado para o login a partir de outra página), ele será usado. Caso contrário, uma página 
             padrão será definida.
+
+            OBS: pode ser que tenha que mudar a forma de autenticação quando tiver que fazer a comunicação entre front-back
             '''
             if usuario.tipo_usuario == 'gerente':
                 redirect_url = request.data.get('next','url/para/uma/página/padrao/gerente') #ALTERAR QUANDO O FRONT ESTIVER FEITO

@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', # Django REST framework
+    'rest_framework.authtoken',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +51,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES' : [
+        'rest_framework.authentication.SessionAuthentication',  # Para uso no navegador
+        'rest_framework.authentication.TokenAuthentication',    # Para APIs
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Exige autenticação por padrão
+    ],
+}
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
 
 ROOT_URLCONF = 'HoMEaL_backend.urls'
 

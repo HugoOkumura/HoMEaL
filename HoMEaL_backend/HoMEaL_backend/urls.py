@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from usuarios.views import CriarConta, Login
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('criar_conta/<str:tipo_usuario>/', CriarConta.as_view(), name='criar_conta'),
+    path('login/', Login.as_view(), name='login'),
+    
 ]

@@ -13,12 +13,14 @@ from .serializer import IngredienteSerializer, LancheSerializer
 # Create your views here.
 
 class CriarLanche(APIView):
+    permission_classes = [IsAuthenticated, GerentePermissao]
 
     def post(self, request):
-        if not request.is_authenticated:
-            return Response({
-                "detail":"Autenticação necessária para criar Lanche",
-                "redirect_url":"/insira/url/da/pagina/login/no/front" # ALTERAR QUANDO O FRONT ESTIVER PRONTO"
-            }, status=status.HTTP_401_UNAUTHORIZED)
+        serializer = LancheSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
+        return Response(status=status.HTTP_400_BAD_REQUEST)
         

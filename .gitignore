@@ -30,3 +30,7 @@ dist/
 npm-debug.log*
 pnpm-debug.log*
 
+HoMEaL_backend/include/*
+HoMEaL_backend/lib/*
+HoMEaL_backend/lib64/*
+HoMEaL_backend/bin/*

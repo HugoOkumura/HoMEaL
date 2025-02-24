@@ -44,7 +44,11 @@ class ListarLanches(APIView):
 
     def get(self, request):
         data = Lanche.objects.all()
+        '''
+        Lista todos os lanches no banco sem descriminação
 
+        Possível implementar uma função para filtrar a listagem futuramente
+        '''
         serializer = LancheSerializer(data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

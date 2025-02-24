@@ -29,3 +29,16 @@ class LancheSerializer(serializers.ModelSerializer):
 
         for i in ingredientes_data:
             Ingrediente.objects.create(lanche=lanche, **i)
+
+    def update(self, instance, validated_data):
+        ingredientes_data = validated_data.pop('ingredientes', None)
+        instance.nome = validated_data('nome', instance.nome)
+        instance.descricao = validated_data('descricao', instance.descricao)
+        instance.save()
+
+        if ingredientes_data is not None:
+            instance.ingredientes.all().delete
+            for ingrediente in ingredientes_data:
+                Ingrediente.objects.create(lanche=instance, **ingrediente)
+        
+        return instance
